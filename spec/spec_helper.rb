@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+SimpleCov.start
+
 RSpec.configure do |config|
   # TODO: need another way... have fake specs
   config.around(:example) do |ex|
