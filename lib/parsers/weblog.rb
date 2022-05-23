@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+require_relative '../validators/line_not_empty'
+require_relative '../validators/line_match'
+require_relative 'constants'
+
 module Parsers
   class Weblog
-    WEBPAGE_FORMAT = %r{^/\w+...\s}
-    IP_FORMAT = /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
+    DEFAULT_FILE_VALIDATORS = [Validators::LineNotEmpty, Validators::LineMatch].freeze
 
     def initialize(file_path:)
       @file_path = file_path
@@ -22,6 +25,8 @@ module Parsers
       parsed_hash = {}
 
       File.foreach(file_path) do |line|
+        line_valid?(line)
+
         webpage = line[WEBPAGE_FORMAT]
         ip      = line[IP_FORMAT]
 
@@ -29,6 +34,12 @@ module Parsers
       end
 
       parsed_hash
+    end
+
+    def line_valid?(line)
+      # TODO: need a better implementation of line validation
+      validators = DEFAULT_FILE_VALIDATORS.map { |validator| validator.new(line: line) }
+      validators.each(&:validate!)
     end
   end
 end

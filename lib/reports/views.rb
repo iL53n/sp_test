@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require_relative '../presenters/reports/weblog_presenter'
+
 module Reports
   class Views
+    include Presenters::Reports::WeblogPresenter
+
     attr_reader :parser, :report, :sorted_hash
 
     def self.new_report(parser:)

@@ -10,9 +10,5 @@ module Reports
       sort_by_count  { |_key, value| value.count }
       prepare_report { |key, value| @report += most_view_line(key, value) }
     end
-
-    def most_view_line(key, value)
-      "#{key}#{value.count} visits\n"
-    end
   end
 end
