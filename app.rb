@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
+require_relative 'lib/parsers/weblog'
+require_relative 'lib/reports/most_views'
+require_relative 'lib/reports/most_uniq_views'
+
 class App
   WEBPAGE_FORMAT = %r{^/\w+...\s}
   IP_FORMAT = /\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/
 
   def start!
     check_input_argv
-    new_report!
   end
 
   private
@@ -34,26 +37,11 @@ class App
   def new_report!
     puts 'In progress'
 
-    parsed_hash = {}
+    parsed_hash = Parsers::Weblog.new(file_path: file_path)
 
-    File.foreach(file_path) do |line|
-      webpage = line[WEBPAGE_FORMAT]
-      ip      = line[IP_FORMAT]
-
-      (parsed_hash[webpage] ||= []).push(ip)
-    end
-
-    parsed_hash.each do |key, value|
-      most_view_line(key, value)
-      most_uniq_view_line(key, value)
-    end
-  end
-
-  def most_view_line(key, value)
-    puts "#{key}#{value.count} visits\n"
-  end
-
-  def most_uniq_view_line(key, value)
-    puts "#{key}#{value.uniq.count} unique views\n"
+    output = []
+    output << Reports::MostViews.new_report(parser: parsed_hash)
+    output << Reports::MostUniqViews.new_report(parser: parsed_hash)
+    output.each { |report| puts report.report}
   end
 end
