@@ -1,2 +1,4 @@
 Metrics/BlockLength:
   IgnoredMethods: ['describe', 'context']
+Style/Documentation:
+  Enabled: false
