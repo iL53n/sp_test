@@ -2,6 +2,8 @@
 
 require_relative '../validators/line_not_empty'
 require_relative '../validators/line_match'
+
+require_relative '../errors/invalid_line'
 require_relative 'constants'
 
 module Parsers

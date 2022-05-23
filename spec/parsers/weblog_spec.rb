@@ -36,4 +36,12 @@ RSpec.describe Parsers::Weblog, type: :class do
       end
     end
   end
+
+  context 'when file contains invalid data' do
+    let(:file_path) { 'spec/fixtures/invalid.log' }
+
+    it 'returns raise error' do
+      expect { subject.send(:parsing_file) }.to raise_error(Errors::InvalidLine)
+    end
+  end
 end
